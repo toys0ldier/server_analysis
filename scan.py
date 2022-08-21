@@ -1,115 +1,16 @@
 '''
 
+this will ONLY work on linux servers and is specifically tuned for 
+
+ubuntu 20.04 or 18.04. see github.com/toys0ldier/server_analysis for
+
+more information and use guides
+
 H/T to shlerp (https://github.com/schlerp) for magic bytes documentation
 
 '''
 
 import os, requests, sys, shutil, csv
-
-OMS =    [{
-        'ascii': 'CWS',
-        'description': 'flash .swf',
-        'extension': 'swf',
-        'hex': '43 57 53',
-        'offset': 0,
-        'value': 1
-    },
-    {
-        'ascii': 'EWS',
-        'description': 'flash .swf',
-        'extension': 'swf',
-        'hex': '46 57 53',
-        'offset': 0,
-        'value': 1
-    },
-    {
-        'ascii': 'MSCF',
-        'description': 'Microsoft Cabinet file',
-        'extension': 'cab',
-        'hex': '4D 53 43 46',
-        'offset': 0,
-        'value': .5
-    },
-    {
-        'ascii': 'PK..',
-        'description': 'zip file format (inc. JAR)',
-        'extension': 'zip',
-        'hex': '50 4B 03 04',
-        'offset': 0,
-        'value': .25
-    },
-    {
-        'ascii': 'Rar!...',
-        'description': 'RAR archive version 1.50 onwards',
-        'extension': 'rar',
-        'hex': '52 61 72 21 1A 07 00',
-        'offset': 0,
-        'value': .25
-    },
-    {
-        'ascii': 'Rar!....',
-        'description': 'RAR archive version 5.0 onwards',
-        'extension': 'rar',
-        'hex': '52 61 72 21 1A 07 01 00',
-        'offset': 0,
-        'value': .25
-    },
-    {
-        'ascii': 'ustar.00ustar  .',
-        'description': 'tar archive',
-        'extension': 'tar',
-        'hex': '75 73 74 61 72 00 30 30 75 73 74 61 72 20 20 00',
-        'offset': 257,
-        'value': .25
-    },
-    {
-        'ascii': '..',
-        'description': 'GZIP',
-        'extension': 'tar.gz',
-        'hex': '1F 8B',
-        'offset': 0,
-        'value': .25
-    },
-        {
-        'ascii': '."M.',
-        'description': 'LZ4 Frame Format, LZ4 block format does not offer any magic bytes.',
-        'extension': 'lz4',
-        'hex': '04 22 4D 18',
-        'offset': 0,
-        'value': .25
-    },
-    {
-        'ascii': 'PK..',
-        'description': 'zip file format and formats based on it, such asJAR,ODF,OOXML ',
-        'extension': 'apk',
-        'hex': '50 4B 07 08',
-        'offset': 0,
-        'value': .50
-    },
-    {
-        'ascii': 'MZ',
-        'description': 'DOS MZ executable file format',
-        'extension': 'exe',
-        'hex': '4D 5A',
-        'offset': 0,
-        'value': 1
-    },
-    {
-        'ascii': 'FEEDFACE',
-        'description': 'Mach-0 Executable (32-bit)',
-        'extension': 'bundle',
-        'hex': 'FE ED FA CE',
-        'offset': 0,
-        'value': 1
-    },
-    {
-        'ascii': 'FEEDFACF',
-        'description': 'Mach-0 Executable (64-bit)',
-        'extension': 'bundle',
-        'hex': 'FE ED FA CF',
-        'offset': 0,
-        'value': 1
-    }]
 
 def scan_tree(path):
     try:
@@ -121,14 +22,16 @@ def scan_tree(path):
     except PermissionError:
         pass
     
-def get_kwds_filenames():
-    KWDS = requests.get('https://raw.githubusercontent.com/toys0ldier/malware_keywords/main/keywords_filenames_only.txt').content.decode('utf-8-sig').split('\n')
-    if KWDS[0] == '404: Not Found':
+def get_kwd_lists():
+    KWDS_FNAMES = requests.get('https://raw.githubusercontent.com/toys0ldier/malware_keywords/main/keywords_filenames_only.txt').content.decode('utf-8-sig').split('\n')
+    KWDS = dict(zip(KWDS_FNAMES, [.75 for _ in range(0, len(KWDS_FNAMES))]))
+    if KWDS == '404: Not Found':
         print('[!] ERROR: Unable to load remote keywords from GitHub, skipping keyword search!')
         return None
+    OMS = requests.get('https://raw.githubusercontent.com/toys0ldier/server_analysis/main/oms.json').json()
     print('\nLoaded %s keywords from wordlist: %s' % (len(KWDS), 'keywords_filenames_only.txt'))
-    print('\nCurrently supported filetypes: %s\n' % ', '.join([d['extension'] for d in OMS][:-1]) + ', and ' + [d['extension'] for d in OMS][-1])
-    return dict(zip(KWDS, [.75 for _ in range(0, len(KWDS))]))
+    print('\nCurrently supported filetypes: %s\n' % ', '.join([d['extension'] for d in OMS]))
+    return KWDS, OMS
 
 def scan_file(wordlist, folder_name, entry):
     results = []
@@ -247,13 +150,20 @@ def scan_single(target):
     return results
     
 def scan():
+    easy_hits = [
+        'home',
+        'var',
+        'mnt',
+        'usr'
+    ]
     results = {
         'target': os.path.splitext(os.path.split(sys.argv[1])[1])[0],
         'data': []
     }
     for entry in os.scandir(sys.argv[1]):
-        print('Working in: %s' % entry.name)
-        results['data'].extend(scan_single(entry))
+        if any(s for s in easy_hits if(s in entry.name)):
+            print('Working in: %s' % entry.name)
+            results['data'].extend(scan_single(entry))
     return results
 
 def print_results(data):
@@ -270,10 +180,9 @@ def save_csv(results):
         writer.writerows(results['data'])
 
 def main():
-    global KWDS, output
+    global KWDS, OMS, output
     output = os.getcwd()
-    KWDS = get_kwds_filenames()
-    
+    KWDS, OMS = get_kwd_lists()
     results = scan()
     if results['data']:
         print_results(results['data'])
