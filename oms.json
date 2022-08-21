@@ -1,106 +1,114 @@
 [
     {
-        'ascii': 'CWS',
-        'description': 'flash .swf',
-        'extension': 'swf',
-        'hex': '43 57 53',
-        'offset': 0,
-        'value': 1
+        "ascii": "CWS",
+        "description": "flash .swf",
+        "extension": "swf",
+        "hex": "43 57 53",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'EWS',
-        'description': 'flash .swf',
-        'extension': 'swf',
-        'hex': '46 57 53',
-        'offset': 0,
-        'value': 1
+        "ascii": "EWS",
+        "description": "flash .swf",
+        "extension": "swf",
+        "hex": "46 57 53",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'MSCF',
-        'description': 'Microsoft Cabinet file',
-        'extension': 'cab',
-        'hex': '4D 53 43 46',
-        'offset': 0,
-        'value': .5
+        "ascii": "MSCF",
+        "description": "Microsoft Cabinet file",
+        "extension": "cab",
+        "hex": "4D 53 43 46",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'PK..',
-        'description': 'zip file format (inc. JAR)',
-        'extension': 'zip',
-        'hex': '50 4B 03 04',
-        'offset': 0,
-        'value': .25
+        "ascii": "PK..",
+        "description": "zip file format (inc. JAR)",
+        "extension": "zip",
+        "hex": "50 4B 03 04",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'Rar!...',
-        'description': 'RAR archive version 1.50 onwards',
-        'extension': 'rar',
-        'hex': '52 61 72 21 1A 07 00',
-        'offset': 0,
-        'value': .25
+        "ascii": "Rar!...",
+        "description": "RAR archive version 1.50 onwards",
+        "extension": "rar",
+        "hex": "52 61 72 21 1A 07 00",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'Rar!....',
-        'description': 'RAR archive version 5.0 onwards',
-        'extension': 'rar',
-        'hex': '52 61 72 21 1A 07 01 00',
-        'offset': 0,
-        'value': .25
+        "ascii": "Rar!....",
+        "description": "RAR archive version 5.0 onwards",
+        "extension": "rar",
+        "hex": "52 61 72 21 1A 07 01 00",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'ustar.00ustar  .',
-        'description': 'tar archive',
-        'extension': 'tar',
-        'hex': '75 73 74 61 72 00 30 30 75 73 74 61 72 20 20 00',
-        'offset': 257,
-        'value': .25
+        "ascii": "ustar.00ustar  .",
+        "description": "tar archive",
+        "extension": "tar",
+        "hex": "75 73 74 61 72 00 30 30 75 73 74 61 72 20 20 00",
+        "offset": 257,
+        "value": 1
     },
     {
-        'ascii': '..',
-        'description': 'GZIP',
-        'extension': 'tar.gz',
-        'hex': '1F 8B',
-        'offset': 0,
-        'value': .25
-    },
-        {
-        'ascii': '."M.',
-        'description': 'LZ4 Frame Format, LZ4 block format does not offer any magic bytes.',
-        'extension': 'lz4',
-        'hex': '04 22 4D 18',
-        'offset': 0,
-        'value': .25
+        "ascii": "..",
+        "description": "GZIP",
+        "extension": "gz",
+        "hex": "1F 8B",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'PK..',
-        'description': 'zip file format and formats based on it, such asJAR,ODF,OOXML ',
-        'extension': 'apk',
-        'hex': '50 4B 07 08',
-        'offset': 0,
-        'value': .50
+        "ascii": "..",
+        "description": "GZIP",
+        "extension": "tar.gz",
+        "hex": "1F 8B",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'MZ',
-        'description': 'DOS MZ executable file format',
-        'extension': 'exe',
-        'hex': '4D 5A',
-        'offset': 0,
-        'value': 1
+        "ascii": ".\"M.",
+        "description": "LZ4 Frame Format, LZ4 block format does not offer any magic bytes.",
+        "extension": "lz4",
+        "hex": "04 22 4D 18",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'FEEDFACE',
-        'description': 'Mach-0 Executable (32-bit)',
-        'extension': 'bundle',
-        'hex': 'FE ED FA CE',
-        'offset': 0,
-        'value': 1
+        "ascii": "PK..",
+        "description": "zip file format and formats based on it, such asJAR,ODF,OOXML ",
+        "extension": "apk",
+        "hex": "50 4B 07 08",
+        "offset": 0,
+        "value": 1
     },
     {
-        'ascii': 'FEEDFACF',
-        'description': 'Mach-0 Executable (64-bit)',
-        'extension': 'bundle',
-        'hex': 'FE ED FA CF',
-        'offset': 0,
-        'value': 1
+        "ascii": "MZ",
+        "description": "DOS MZ executable file format",
+        "extension": "exe",
+        "hex": "4D 5A",
+        "offset": 0,
+        "value": 1
+    },
+    {
+        "ascii": "FEEDFACE",
+        "description": "Mach-0 Executable (32-bit)",
+        "extension": "bundle",
+        "hex": "FE ED FA CE",
+        "offset": 0,
+        "value": 1
+    },
+    {
+        "ascii": "FEEDFACF",
+        "description": "Mach-0 Executable (64-bit)",
+        "extension": "bundle",
+        "hex": "FE ED FA CF",
+        "offset": 0,
+        "value": 1
     }
 ]
